@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 from IPython.display import Markdown, display, update_display
 from openai import OpenAI
+import gradio as gr # oh yeah!
 
 
 load_dotenv(override=True)
@@ -115,8 +116,15 @@ def get_season_summary_with_links(url):
       ],
     )
     result = response.choices[0].message.content
-    print(result)
+    # display_fit = display(Markdown(result))
     return result
 
 
-get_season_summary_with_links('https://en.wikipedia.org/wiki/2024_NFL_season')
+# get_season_summary_with_links('https://en.wikipedia.org/wiki/2024_NFL_season')
+
+gr.Interface(
+    fn=get_season_summary_with_links, 
+    inputs=gr.Textbox(label="Enter Wikipedia URL"), 
+    outputs=gr.Markdown(label="Season Summary"), 
+    flagging_mode="never"
+).launch(share=True)
